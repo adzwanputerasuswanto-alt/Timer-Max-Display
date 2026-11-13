@@ -51,8 +51,22 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      
+      - name: Configure Android SDK
+        shell: bash
+        run: |
+          echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"
+          echo "/usr/local/lib/android/sdk/platform-tools" >> "$GITHUB_PATH"
+          echo "/usr/local/lib/android/sdk/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+
+          if [ ! -x "/usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
+            echo "Android SDK Command-line Tools tidak ditemukan"
+            ls -la /usr/local/lib/android/sdk/cmdline-tools/ || true
+            exit 1
+          fi
+
+          echo "Android SDK ditemukan"
+
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
