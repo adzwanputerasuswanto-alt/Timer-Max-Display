@@ -68,10 +68,25 @@ jobs:
           echo "Android SDK ditemukan"
 
 
+      - name: Fix Gradle Wrapper Version
+        shell: bash
+        run: |
+          WRAPPER="$PROJECT_DIR/gradle/wrapper/gradle-wrapper.properties"
+
+          if [ ! -f "$WRAPPER" ]; then
+            echo "File Gradle Wrapper tidak ditemukan: $WRAPPER"
+            exit 1
+          fi
+
+          sed -i 's#distributionUrl=.*#distributionUrl=https\\://services.gradle.org/distributions/gradle-8.9-all.zip#' "$WRAPPER"
+
+          echo "Gradle Wrapper berhasil diperbarui:"
+          cat "$WRAPPER"
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.7"
+          gradle-version: "8.9"
 
       - name: Build APK
         working-directory: ${{ env.PROJECT_DIR }}
