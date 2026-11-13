@@ -29,6 +29,7 @@ jobs:
             echo "Project Gradle tidak ditemukan"
             exit 1
           fi
+          sed -i 's#^distributionUrl=.*#distributionUrl=https\\://services.gradle.org/distributions/gradle-8.9-all.zip#' "$PROJECT_DIR/gradle/wrapper/gradle-wrapper.properties"
           echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
 
       - name: Check Android SDK
